@@ -1,0 +1,23 @@
+name: Deploy HTML Files to AppService - CMST385
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v1
+        with:
+          # Change the app-name to match what was provided to you in the publish settings file
+          # For you, this comes from msdeploySite="CMST388-UMGC-jdonkor2" in the XML
+          app-name: 'CMST388-UMGC-jdonkor2'
+          slot-name: 'production'
+          # Change the publish profile to match what you named your secret in GitHub
+          publish-profile: ${{ secrets.APPSERVICECMST388 }}
