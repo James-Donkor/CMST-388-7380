@@ -47,10 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
     */
 
     document.querySelector("#change-language").addEventListener('click', () => {
-        let inputValue = document.getElementById("newLanguage").value;
-        let element = document.querySelector(".currentLanguage");
-        element.innerHTML = inputValue;
+    // 1. Get the input value
+    let inputValue = document.getElementById("newLanguage").value;
+
+    // 2. Select ALL elements with class currentLanguage
+    document.querySelectorAll(".currentLanguage").forEach(el => {
+        // 3. Update each one with the new value
+        el.innerHTML = inputValue;
     });
+});
+
 
     /* PART 4: TOGGLES
     --------------------------------------------------
