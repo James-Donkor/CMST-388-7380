@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; }
+        h1 { margin-left: 60px; }
+        form { margin-left: 60px; }
+        label { display: inline-block; width: 130px; margin-bottom: 6px; }
+        input[type="text"], select, textarea {
+            border: 2px solid #000;
+            padding: 3px;
+        }
+        textarea {
+            width: 300px;
+            height: 150px;
+        }
+        .field-row { margin-bottom: 6px; }
+        .small-input { width: 70px; }
+        .medium-input { width: 150px; }
+        .long-input { width: 300px; }
+        .indent { margin-left: 135px; }
+        .error-box { color: red; margin-top: 10px; margin-bottom: 10px; }
+        .buttons { margin-top: 15px; }
+        .buttons input { padding: 5px 15px; margin-right: 15px; }
+    </style>
+</head>
+
+<body>
+
+<h1>Registration Form</h1>
+
+<form id="registrationForm">
+
+    <div class="field-row">
+        <label for="firstName">First Name:*</label>
+        <input type="text" id="firstName" class="long-input"
+               value="First Name" onfocus="clearDefault(this, 'First Name')">
+    </div>
+
+    <div class="field-row">
+        <label for="lastName">Last Name:*</label>
+        <input type="text" id="lastName" class="long-input"
+               value="Last Name" onfocus="clearDefault(this, 'Last Name')">
+    </div>
+
+    <div class="field-row">
+        <label for="address">Address:*</label>
+        <input type="text" id="address" class="long-input">
+    </div>
+
+    <div class="field-row">
+        <label for="city">City:*</label>
+        <input type="text" id="city" class="medium-input">
+    </div>
+
+    <div class="field-row">
+        <label for="state">State:*</label>
+        <select id="state" class="small-input">
+            <option value="">--Select--</option>
+            <option value="CA">CA</option>
+            <option value="NY">NY</option>
+            <option value="TX">TX</option>
+            <option value="FL">FL</option>
+            <option value="MA">MA</option>
+        </select>
+    </div>
+
+    <div class="field-row">
+        <label for="zip">Zip Code:*</label>
+        <input type="text" id="zip" class="small-input">
+    </div>
+
+    <div class="field-row">
+        <label for="areaCode">Phone:*</label>
+        <input type="text" id="areaCode" class="small-input">
+        <input type="text" id="phoneNumber" class="medium-input">
+    </div>
+
+    <div class="field-row">
+        <label for="email">E-mail:*</label>
+        <input type="text" id="email" class="long-input">
+    </div>
+
+    <div class="field-row">
+        <label for="confirmEmail">Confirm E-mail:*</label>
+        <input type="text" id="confirmEmail" class="long-input">
+    </div>
+
+    <label>Meal Preference:*</label><br>
+    <div class="indent">
+        <input type="radio" name="meal" value="Vegan"> Vegan<br>
+        <input type="radio" name="meal" value="Vegetarian"> Vegetarian<br>
+        <input type="radio" name="meal" value="Non-Vegetarian"> Non-Vegetarian
+    </div>
+
+    <br>
+
+    <label>Contact Method:*</label><br>
+    <div class="indent">
+        <input type="checkbox" name="contactMethod" value="Phone"> Phone
+        <input type="checkbox" name="contactMethod" value="E-mail"> E-mail<br>
+        <input type="checkbox" name="contactMethod" value="Mail"> Mail
+        <input type="checkbox" name="contactMethod" value="LinkedIn"> LinkedIn
+    </div>
+
+    <br>
+
+    <div class="field-row">
+        <label for="comments">Comments:</label>
+        <textarea id="comments" maxlength="250"></textarea>
+    </div>
+
+    <div id="errorMessages" class="error-box"></div>
+
+    <div class="buttons">
+        <input type="button" value="Submit" onclick="submitForm()">
+        <input type="button" value="Reset" onclick="resetForm()">
+    </div>
+
+</form>
+
+<script src="project2.js"></script>
+
+</body>
+</html>
