@@ -1,5 +1,5 @@
 // If the user clicks a field that still has the placeholder text, clear it so they can start typing.
-function clearDefault(field, text) {
+function clearPlaceholder(field, text) {
     if (field.value === text) {
         field.value = "";
     }
@@ -8,9 +8,8 @@ function clearDefault(field, text) {
 
 
 
-// This runs when the user hits the submit button.
-//  show errors, and if it's good, build email.
-function submitForm() {
+// This runs when the user hits the submit button, show errors and if good, build email.
+function handleFormSubmit() {
 
     let errors = []; // collect all error messages 
     let errorSpot = document.getElementById("errorMessages");
@@ -132,8 +131,9 @@ Comments: ${notes}
 
     // Email link (
     let mailtoLink =
-        "mailto:your-email@example.com?subject=Registration Form&body=" +
-        encodeURIComponent(body);
+    "mailto:jdonkor2@student.umgc.edu?subject=Registration Form&body=" +
+    encodeURIComponent(body);
+
 
     // Launch user's email client
     window.location.href = mailtoLink;
@@ -143,7 +143,7 @@ Comments: ${notes}
 
 
 // wipe the entire form and any error messages.
-function resetForm() {
+function clearForm() {
     document.getElementById("registrationForm").reset();
     document.getElementById("errorMessages").innerHTML = "";
 }
