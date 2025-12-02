@@ -1,211 +1,148 @@
-// ---------------------------------------------------------
-// clearDefault()
-// Removes default text when the user clicks into the field.
-// This prevents accidental submissions with placeholder text.
-// ---------------------------------------------------------
-function clearDefault(field, defaultText) {
-    if (field.value === defaultText) {
+// If the user clicks a field that still has the placeholder text, clear it so they can start typing.
+function clearDefault(field, text) {
+    if (field.value === text) {
         field.value = "";
     }
 }
 
 
 
-// ---------------------------------------------------------
-// submitForm()
-// Main validation function called when user presses Submit.
-// Validates ALL fields, displays errors, and emails the form.
-// ---------------------------------------------------------
+
+// This runs when the user hits the submit button.
+//  show errors, and if it's good, build email.
 function submitForm() {
 
-    // Store all error messages here
-    let errors = [];
+    let errors = []; // collect all error messages 
+    let errorSpot = document.getElementById("errorMessages");
 
-    // Location where errors will be displayed
-    let errorDiv = document.getElementById("errorMessages");
+    // Grab the form values 
+    let fName   = document.getElementById("firstName").value.trim();
+    let lName   = document.getElementById("lastName").value.trim();
+    let addr    = document.getElementById("address").value.trim();
+    let city    = document.getElementById("city").value.trim();
+    let state   = document.getElementById("state").value.trim();
+    let zip     = document.getElementById("zip").value.trim();
+    let acode   = document.getElementById("areaCode").value.trim();
+    let pnum    = document.getElementById("phoneNumber").value.trim();
+    let email   = document.getElementById("email").value.trim();
+    let email2  = document.getElementById("confirmEmail").value.trim();
+    let notes   = document.getElementById("comments").value.trim();
 
-    // ---------------------------------------------------------
-    // Collect values from the form and trim whitespace
-    // ---------------------------------------------------------
-    let firstName      = document.getElementById("firstName").value.trim();
-    let lastName       = document.getElementById("lastName").value.trim();
-    let address        = document.getElementById("address").value.trim();
-    let city           = document.getElementById("city").value.trim();
-    let state          = document.getElementById("state").value.trim();
-    let zip            = document.getElementById("zip").value.trim();
-    let areaCode       = document.getElementById("areaCode").value.trim();
-    let phoneNumber    = document.getElementById("phoneNumber").value.trim();
-    let email          = document.getElementById("email").value.trim();
-    let confirmEmail   = document.getElementById("confirmEmail").value.trim();
-    let comments       = document.getElementById("comments").value.trim();
-
-    // ---------------------------------------------------------
-    // Regular expressions for validation
-    // ---------------------------------------------------------
-    const alphaRegex   = /^[A-Za-z]+$/;                 // Letters only
-    const cityRegex    = /^[A-Za-z ]+$/;                // Letters + spaces
-    const addressRegex = /^[A-Za-z0-9 .#\-]+$/;         // Letters, numbers, punctuation
-    const numericRegex = /^[0-9]+$/;                    // Digits only
-    const emailRegex   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Basic email format
+    //regex
+    const onlyLetters   = /^[A-Za-z]+$/;
+    const cityLetters   = /^[A-Za-z ]+$/;
+    const addrPattern   = /^[A-Za-z0-9 .#\-]+$/;
+    const onlyNums      = /^[0-9]+$/;
+    const emailPattern  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
 
-    // ---------------------------------------------------------
-    // VALIDATE FIRST NAME
-    // ---------------------------------------------------------
-    if (firstName === "" || firstName === "First Name") {
-        errors.push("First name is required.");
-    } else if (!alphaRegex.test(firstName)) {
-        errors.push("First name must contain alphabetic characters only.");
+    // First/ last name checks
+    if (!fName || fName === "First Name" || !onlyLetters.test(fName)) {
+        errors.push("Please enter a valid first name (letters only).");
     }
 
-    // ---------------------------------------------------------
-    // VALIDATE LAST NAME
-    // ---------------------------------------------------------
-    if (lastName === "" || lastName === "Last Name") {
-        errors.push("Last name is required.");
-    } else if (!alphaRegex.test(lastName)) {
-        errors.push("Last name must contain alphabetic characters only.");
+    if (!lName || lName === "Last Name" || !onlyLetters.test(lName)) {
+        errors.push("Please enter a valid last name (letters only).");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE ADDRESS
-    // ---------------------------------------------------------
-    if (address === "") {
-        errors.push("Address is required.");
-    } else if (!addressRegex.test(address)) {
-        errors.push("Address can contain letters, numbers, spaces, '.', '#', and '-'.");
+    // address checks
+    if (!addr || !addrPattern.test(addr)) {
+        errors.push("Please enter a valid street address.");
+    }
+
+    if (!city || !cityLetters.test(city)) {
+        errors.push("City can only contain letters and spaces.");
+    }
+
+    if (!state) {
+        errors.push("Please pick a state.");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE CITY
-    // ---------------------------------------------------------
-    if (city === "") {
-        errors.push("City is required.");
-    } else if (!cityRegex.test(city)) {
-        errors.push("City must contain alphabetic characters only.");
+    // Zip & phone
+    if (!onlyNums.test(zip) || zip.length !== 5) {
+        errors.push("Zip must be exactly 5 digits.");
+    }
+
+    if (!onlyNums.test(acode) || acode.length !== 3) {
+        errors.push("Area code must be 3 digits.");
+    }
+
+    if (!onlyNums.test(pnum) || pnum.length !== 7) {
+        errors.push("Phone number must be 7 digits.");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE STATE
-    // ---------------------------------------------------------
-    if (state === "") {
-        errors.push("Please select a state.");
+    // Email + confirmation
+    if (!emailPattern.test(email)) {
+        errors.push("Please type a valid email address.");
+    }
+
+    if (email !== email2) {
+        errors.push("Your emails don't match.");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE ZIP CODE (5 digits exactly)
-    // ---------------------------------------------------------
-    if (!numericRegex.test(zip) || zip.length !== 5) {
-        errors.push("Zip code must be exactly 5 numeric digits.");
+    // Meal choice
+    let meal = document.querySelector('input[name="meal"]:checked');
+    if (!meal) {
+        errors.push("Please choose a meal option.");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE PHONE NUMBER
-    // ---------------------------------------------------------
-    if (!numericRegex.test(areaCode) || areaCode.length !== 3) {
-        errors.push("Area code must be exactly 3 digits.");
-    }
-
-    if (!numericRegex.test(phoneNumber) || phoneNumber.length !== 7) {
-        errors.push("Phone number must be exactly 7 digits.");
+    // Contact methods
+    let contactChoices = document.querySelectorAll('input[name="contactMethod"]:checked');
+    if (contactChoices.length < 2) {
+        errors.push("Pick at least two contact methods.");
     }
 
 
-    // ---------------------------------------------------------
-    // VALIDATE EMAIL FORMAT
-    // ---------------------------------------------------------
-    if (!emailRegex.test(email)) {
-        errors.push("You have entered an invalid e-mail address.");
+    // Comments
+    if (notes.length > 250) {
+        errors.push("Comments can’t be more than 250 characters.");
     }
 
 
-    // ---------------------------------------------------------
-    // CONFIRM EMAIL MATCHES
-    // ---------------------------------------------------------
-    if (email !== confirmEmail) {
-        errors.push("Confirm e-mail must match the E-mail field exactly.");
-    }
-
-
-    // ---------------------------------------------------------
-    // VALIDATE MEAL SELECTION
-    // ---------------------------------------------------------
-    let mealSelected = document.querySelector('input[name="meal"]:checked');
-    if (!mealSelected) {
-        errors.push("Meal preference is required.");
-    }
-
-
-    // ---------------------------------------------------------
-    // VALIDATE CONTACT METHODS (Need 2+)
-    // ---------------------------------------------------------
-    let contactMethods = document.querySelectorAll('input[name="contactMethod"]:checked');
-
-    if (contactMethods.length < 2) {
-        errors.push("Please select at least TWO contact methods.");
-    }
-
-
-    // ---------------------------------------------------------
-    // VALIDATE COMMENTS LENGTH
-    // ---------------------------------------------------------
-    if (comments.length > 250) {
-        errors.push("Comments cannot exceed 250 characters.");
-    }
-
-
-    // ---------------------------------------------------------
-    // DISPLAY ALL ERRORS IF ANY EXIST
-    // ---------------------------------------------------------
+    // If there are errors, show them and stop 
     if (errors.length > 0) {
-        errorDiv.innerHTML = "<ul>" + errors.map(e => `<li>${e}</li>`).join("") + "</ul>";
-        return; // Stop submission
+        errorSpot.innerHTML =
+            "<ul>" + errors.map(err => `<li>${err}</li>`).join("") + "</ul>";
+        return;
     }
 
-    // If no errors, clear error display
-    errorDiv.innerHTML = "";
+    //clear old messages
+    errorSpot.innerHTML = "";
 
 
-    // ---------------------------------------------------------
-    // BUILD EMAIL BODY TEXT (using template literal)
-    // ---------------------------------------------------------
+    //email body text
     let body =
-`Name: ${firstName} ${lastName}
-Address: ${address}
+`Name: ${fName} ${lName}
+Address: ${addr}
 City: ${city}
 State: ${state}
 Zip: ${zip}
-Phone: (${areaCode}) ${phoneNumber}
+Phone: (${acode}) ${pnum}
 Email: ${email}
-Meal Preference: ${mealSelected.value}
-Contact Methods: ${Array.from(contactMethods).map(c => c.value).join(", ")}
-Comments: ${comments}
+Meal Preference: ${meal.value}
+Contact Methods: ${Array.from(contactChoices).map(c => c.value).join(", ")}
+Comments: ${notes}
 `;
 
-
-    // ---------------------------------------------------------
-    // SEND EMAIL USING MAILTO (change email below)
-    // ---------------------------------------------------------
+    // Email link (
     let mailtoLink =
         "mailto:your-email@example.com?subject=Registration Form&body=" +
         encodeURIComponent(body);
 
-    // Opens user's email client with form pre-filled
+    // Launch user's email client
     window.location.href = mailtoLink;
 }
 
 
 
-// ---------------------------------------------------------
-// resetForm()
-// Clears form fields and error messages
-// ---------------------------------------------------------
+
+// wipe the entire form and any error messages.
 function resetForm() {
     document.getElementById("registrationForm").reset();
     document.getElementById("errorMessages").innerHTML = "";
